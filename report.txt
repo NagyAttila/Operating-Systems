@@ -133,9 +133,16 @@ chdir
 		On success: 0.
 		On failure: -1.
 
+"Experiment with the following lines of code. What happens if you put some code after Point #1?"
+If you put in some code for the child process to execute, the parent will terminate before the child is done.
+
 Question 3
 
-The programs does ... <this>
+The program calls the sigtest function whenever the SIGINT signal is received, i.e. when the user presses Ctrl+C.
+Point #1 handles Ctrl+C.
+Point #2 handles Ctrl+Z.
+Both key combinations are NOT being handled.
+We can handle Ctrl+Z as well by adding the line: signal(SIGTSTP, sigtest);
 
 Point #1 handles key combination .... and point #2 key 
 combination ....
