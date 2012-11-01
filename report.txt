@@ -1,0 +1,133 @@
+Group number: 
+Partner 1, Name and personal number:
+Partner 2, Name and personal number:
+
+Question 1
+
+The flag -Wall says that warnings will be raised about code that uses "questionable" constructions that aren't outright wrong.
+
+The flag -g says that debugging information will be produced by the compiler.
+
+Question 2
+
+fork
+    Brief function description -- Duplicates the current process into a new process.
+    Arguments description -- No arguments.
+    Required include files -- unistd.h
+    All possible return values -- EAGAIN, ENOMEM
+
+clone
+    Brief function description -- Create a new process sharing the same memory space as the original, in order to create threads.
+    Arguments description --
+		fn: The function to run in the new threads.
+    Required include files --
+    All possible return values --
+
+creat
+    Brief function description --
+    Arguments description --
+    Required include files --
+    All possible return values --
+
+open
+    Brief function description --
+    Arguments description --
+    Required include files --
+    All possible return values --
+
+close
+    Brief function description --
+    Arguments description --
+    Required include files --
+    All possible return values --
+
+wait
+    Brief function description --
+    Arguments description --
+    Required include files --
+    All possible return values --
+
+stat
+    Brief function description --
+    Arguments description --
+    Required include files --
+    All possible return values --
+
+signal
+    Brief function description --
+    Arguments description --
+    Required include files --
+    All possible return values --
+
+pipe
+    Brief function description --
+    Arguments description --
+    Required include files --
+    All possible return values --
+
+dup
+    Brief function description --
+    Arguments description --
+    Required include files --
+    All possible return values --
+
+exit
+    Brief function description --
+    Arguments description --
+    Required include files --
+    All possible return values --
+
+execvp
+    Brief function description --
+    Arguments description --
+    Required include files --
+    All possible return values --
+
+chdir
+    Brief function description --
+    Arguments description --
+    Required include files --
+    All possible return values --
+
+Question 3
+
+The programs does ... <this>
+
+Point #1 handles key combination .... and point #2 key 
+combination ....
+
+Both combinations are handled because ... 
+or
+Only point #1/point#2 is being handled but we can handle
+both by ....
+or
+No key combination is being handled but we can handle
+both by ....
+
+Question 4
+
+The parent process is ... <doing something>
+and the child process is ... <doing something else>
+using ... <this thing>
+
+The close(p[0]) command is used to ... and the close(p[1]) 
+command to ...
+
+
+Question 5
+
+The command is ...
+In case that ... it prints that ...
+However, if there are no ... then it merely prints ...
+
+Here is a command that kills a zombie process:
+
+We should use such a command when ...
+
+
+The command ulimit allows us to ...
+
+We can restrict processes from executing programs that
+proliferate zombie by ...
+
+We can extend that technique to other resources by ...
