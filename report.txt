@@ -173,13 +173,15 @@ However, if there are no zombie processes then it merely prints the process info
 
 Here is a command that kills a zombie process:
 
+kill -9 `ps -p 1301 -o ppid | tail -n 1`
 
-We should use such a command when ...
+We should use such a command when the parent process is stuck in a loop, preventing the children from being killed.
 
+The command (ps aux | grep -v "^root" | wc -l) shows the number of processes not started by root.
 
-The command ulimit allows us to ...
+The command ulimit allows us to limit the number of resources available to a user.
 
 We can restrict processes from executing programs that
-proliferate zombie by ...
+proliferate zombies by running the command (ulimit -u x), where "x" is the maximum number of processes to allow.
 
-We can extend that technique to other resources by ...
+We can extend that technique to other resources by using a different switch, such as -n (for file descriptors) or -f (for file size).
