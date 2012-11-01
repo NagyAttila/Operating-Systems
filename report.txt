@@ -15,7 +15,7 @@ fork
     Arguments description -- No arguments.
     Required include files -- unistd.h
     All possible return values --
-		On success: Thread ID of the child process (but 0 in the child process).
+		On success: ID of the child process (but 0 in the child process).
 		On failure: -1.
 
 clone
@@ -27,78 +27,111 @@ clone
 		arg: An argument to pass to the function.
     Required include files -- sched.h
     All possible return values --
-		On success: Thread ID of the child process.
+		On success: ID of the child process.
 		On failure: -1.
 
 creat
     Brief function description -- Opens and possibly creates a file (or device).
     Arguments description --
 		pathname: The name of the file.
-		mode: Whether we want to read, write, or read and write to the file (O_RDONLY, O_WRONLY, O_RDWR).
+		mode: The permissions for the file.
     Required include files -- types.h, stat.h, fcntl.h
     All possible return values --
 		On success: The new file descriptor.
 		On failure: -1.
 
 open
-    Brief function description --
+    Brief function description -- Opens and possibly creates a file (or device).
     Arguments description --
-    Required include files --
+		pathname: The name of the file.
+		flags: Whether we want to read, write, or read and write to the file (O_RDONLY, O_WRONLY, O_RDWR).
+		mode: The permissions for the file (optional).
+    Required include files -- sys/types.h, sys/stat.h, fcntl.h
     All possible return values --
+		On success: The new file descriptor.
+		On failure: -1.
 
 close
-    Brief function description --
+    Brief function description -- Closes a file descriptor.
     Arguments description --
-    Required include files --
+		fd: The file descriptor to close.
+    Required include files -- unistd.h
     All possible return values --
+		On success: 0.
+		On failure: -1.
 
 wait
-    Brief function description --
+    Brief function description -- Wait for a child process to terminate.
     Arguments description --
-    Required include files --
+		status: Stores the status of the process that terminated.
+    Required include files -- sys/types.h, sys/wait.h
     All possible return values --
+		On success: ID of the terminated process.
+		On failure: -1.
 
 stat
-    Brief function description --
+    Brief function description -- Get information about a file.
     Arguments description --
-    Required include files --
+		path: The name of the file.
+		buf: The struct to store the information in.
+    Required include files -- sys/types.h, sys/stat.h, unistd.h
     All possible return values --
+		On success: 0.
+		On failure: -1.
 
 signal
-    Brief function description --
+    Brief function description -- Register a function to run when a signal with the given number is received.
     Arguments description --
-    Required include files --
+		signum: The signal number to listen for.
+		handler: The function to run (or SIG_IGN or SIG_DFL, for "ignore" and "default handler", respectively).
+    Required include files -- signal.h
     All possible return values --
+		On success: The previous signal handler.
+		On failure: SIG_ERR.
 
 pipe
-    Brief function description --
+    Brief function description -- Creates a unidirectional data channel for interprocess communication.
     Arguments description --
-    Required include files --
+		pipefd: An array with two elements, which will contain the read and write ends of the pipe.
+    Required include files -- unistd.h
     All possible return values --
+		On success: 0.
+		On failure: -1.
 
 dup
-    Brief function description --
+    Brief function description -- Duplicates a file descriptor.
     Arguments description --
-    Required include files --
+		oldfd: The file descriptor to duplicate.
+    Required include files -- unistd.h
     All possible return values --
+		On success: The new file descriptor.
+		On failure: -1.
 
 exit
-    Brief function description --
+    Brief function description -- Terminate the calling process.
     Arguments description --
-    Required include files --
-    All possible return values --
+		status: The status to exit with (which will be passed to the parent process).
+    Required include files -- stdlib.h
+    All possible return values -- Does not return.
 
 execvp
-    Brief function description --
+    Brief function description -- Execute a file.
     Arguments description --
-    Required include files --
+		file: The name of the file to execute.
+		argv: An array of arguments to pass to the new program.
+    Required include files -- unistd.h
     All possible return values --
+		On success: Does not return.
+		On failure: -1.
 
 chdir
-    Brief function description --
+    Brief function description -- Change the working directory.
     Arguments description --
-    Required include files --
+		path: The working directory to change to.
+    Required include files -- unistd.h
     All possible return values --
+		On success: 0.
+		On failure: -1.
 
 Question 3
 
