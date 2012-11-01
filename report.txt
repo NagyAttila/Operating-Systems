@@ -14,20 +14,31 @@ fork
     Brief function description -- Duplicates the current process into a new process.
     Arguments description -- No arguments.
     Required include files -- unistd.h
-    All possible return values -- EAGAIN, ENOMEM
+    All possible return values --
+		On success: Thread ID of the child process (but 0 in the child process).
+		On failure: -1.
 
 clone
     Brief function description -- Create a new process sharing the same memory space as the original, in order to create threads.
     Arguments description --
-		fn: The function to run in the new threads.
-    Required include files --
+		fn: The function to run in the new process.
+		child_stack: Pointer to a stack for the new process.
+		flags: Various options.
+		arg: An argument to pass to the function.
+    Required include files -- sched.h
     All possible return values --
+		On success: Thread ID of the child process.
+		On failure: -1.
 
 creat
-    Brief function description --
+    Brief function description -- Opens and possibly creates a file (or device).
     Arguments description --
-    Required include files --
+		pathname: The name of the file.
+		mode: Whether we want to read, write, or read and write to the file (O_RDONLY, O_WRONLY, O_RDWR).
+    Required include files -- types.h, stat.h, fcntl.h
     All possible return values --
+		On success: The new file descriptor.
+		On failure: -1.
 
 open
     Brief function description --
