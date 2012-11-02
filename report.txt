@@ -1,0 +1,187 @@
+Group number: 
+Partner 1, Name and personal number:
+Partner 2, Name and personal number:
+
+Question 1
+
+The flag -Wall says that warnings will be raised about code that uses "questionable" constructions that aren't outright wrong.
+
+The flag -g says that debugging information will be produced by the compiler.
+
+Question 2
+
+fork
+    Brief function description -- Duplicates the current process into a new process.
+    Arguments description -- No arguments.
+    Required include files -- unistd.h
+    All possible return values --
+		On success: ID of the child process (but 0 in the child process).
+		On failure: -1.
+
+clone
+    Brief function description -- Create a new process sharing the same memory space as the original, in order to create threads.
+    Arguments description --
+		fn: The function to run in the new process.
+		child_stack: Pointer to a stack for the new process.
+		flags: Various options.
+		arg: An argument to pass to the function.
+    Required include files -- sched.h
+    All possible return values --
+		On success: ID of the child process.
+		On failure: -1.
+
+creat
+    Brief function description -- Opens and possibly creates a file (or device).
+    Arguments description --
+		pathname: The name of the file.
+		mode: The permissions for the file.
+    Required include files -- types.h, stat.h, fcntl.h
+    All possible return values --
+		On success: The new file descriptor.
+		On failure: -1.
+
+open
+    Brief function description -- Opens and possibly creates a file (or device).
+    Arguments description --
+		pathname: The name of the file.
+		flags: Whether we want to read, write, or read and write to the file (O_RDONLY, O_WRONLY, O_RDWR).
+		mode: The permissions for the file (optional).
+    Required include files -- sys/types.h, sys/stat.h, fcntl.h
+    All possible return values --
+		On success: The new file descriptor.
+		On failure: -1.
+
+close
+    Brief function description -- Closes a file descriptor.
+    Arguments description --
+		fd: The file descriptor to close.
+    Required include files -- unistd.h
+    All possible return values --
+		On success: 0.
+		On failure: -1.
+
+wait
+    Brief function description -- Wait for a child process to terminate.
+    Arguments description --
+		status: Stores the status of the process that terminated.
+    Required include files -- sys/types.h, sys/wait.h
+    All possible return values --
+		On success: ID of the terminated process.
+		On failure: -1.
+
+stat
+    Brief function description -- Get information about a file.
+    Arguments description --
+		path: The name of the file.
+		buf: The struct to store the information in.
+    Required include files -- sys/types.h, sys/stat.h, unistd.h
+    All possible return values --
+		On success: 0.
+		On failure: -1.
+
+signal
+    Brief function description -- Register a function to run when a signal with the given number is received.
+    Arguments description --
+		signum: The signal number to listen for.
+		handler: The function to run (or SIG_IGN or SIG_DFL, for "ignore" and "default handler", respectively).
+    Required include files -- signal.h
+    All possible return values --
+		On success: The previous signal handler.
+		On failure: SIG_ERR.
+
+pipe
+    Brief function description -- Creates a unidirectional data channel for interprocess communication.
+    Arguments description --
+		pipefd: An array with two elements, which will contain the read and write ends of the pipe.
+    Required include files -- unistd.h
+    All possible return values --
+		On success: 0.
+		On failure: -1.
+
+dup
+    Brief function description -- Duplicates a file descriptor.
+    Arguments description --
+		oldfd: The file descriptor to duplicate.
+    Required include files -- unistd.h
+    All possible return values --
+		On success: The new file descriptor.
+		On failure: -1.
+
+exit
+    Brief function description -- Terminate the calling process.
+    Arguments description --
+		status: The status to exit with (which will be passed to the parent process).
+    Required include files -- stdlib.h
+    All possible return values -- Does not return.
+
+execvp
+    Brief function description -- Execute a file.
+    Arguments description --
+		file: The name of the file to execute.
+		argv: An array of arguments to pass to the new program.
+    Required include files -- unistd.h
+    All possible return values --
+		On success: Does not return.
+		On failure: -1.
+
+chdir
+    Brief function description -- Change the working directory.
+    Arguments description --
+		path: The working directory to change to.
+    Required include files -- unistd.h
+    All possible return values --
+		On success: 0.
+		On failure: -1.
+
+"Experiment with the following lines of code. What happens if you put some code after Point #1?"
+If you put in some code for the child process to execute, the parent will terminate before the child is done.
+
+Question 3
+
+The program calls the sigtest function whenever the SIGINT signal is received, i.e. when the user presses Ctrl+C.
+Point #1 handles Ctrl+C.
+Point #2 handles Ctrl+Z.
+Both key combinations are NOT being handled.
+We can handle Ctrl+Z as well by adding the line: signal(SIGTSTP, sigtest);
+
+Point #1 handles key combination .... and point #2 key 
+combination ....
+
+Both combinations are handled because ... 
+or
+Only point #1/point#2 is being handled but we can handle
+both by ....
+or
+No key combination is being handled but we can handle
+both by ....
+
+Question 4
+
+The parent process is reading a string from the child process
+and the child process is writing a string to the parent process
+using the read and write ends of the pipe that was created.
+
+The close(p[0]) command is used to close the read end of the pipe (which the child doesn't need) 
+and the close(p[1]) command is used to close the write end of the pipe (which the parent doesn't need).
+
+
+Question 5
+
+The command is not empty when there are zombie processes.
+In case that there are zombie processes it prints the process info, including the fact that it's in zombie (or defunct) state.
+However, if there are no zombie processes then it merely prints the process info for the (ps aux | grep defunct) process.
+
+Here is a command that kills a zombie process:
+
+kill -9 `ps -p 1301 -o ppid | tail -n 1`
+
+We should use such a command when the parent process is stuck in a loop, preventing the children from being killed.
+
+The command (ps aux | grep -v "^root" | wc -l) shows the number of processes not started by root.
+
+The command ulimit allows us to limit the number of resources available to a user.
+
+We can restrict processes from executing programs that
+proliferate zombies by running the command (ulimit -u x), where "x" is the maximum number of processes to allow.
+
+We can extend that technique to other resources by using a different switch, such as -n (for file descriptors) or -f (for file size).
