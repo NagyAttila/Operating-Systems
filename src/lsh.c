@@ -2,13 +2,16 @@
 #include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <dirent.h>
+#include <string.h>
+
 #include "parse.h"
 
 /*
  * Prototypes
  */
 
-void PrintCommand(int, Command *);
+void PrintCommand(int, Command);
 void PrintPgm(Pgm *);
 void stripwhite(char *);
 
@@ -49,9 +52,10 @@ int main(void)
       if(*line)
       {
         add_history(line);
-        /* execute it */
         n = parse(line, &cmd);
-        PrintCommand(n, &cmd);
+        CheckCmdInPath(cmd.pgm);
+        /* execute it */
+        PrintCommand(n, cmd);
       }
     }
 
@@ -68,13 +72,13 @@ int main(void)
  *
  */
 void
-PrintCommand (int n, Command *cmd)
+PrintCommand (int n, Command cmd)
 {
   printf("Parse returned %d:\n", n);
-  printf("   stdin : %s\n", cmd->rstdin  ? cmd->rstdin  : "<none>" );
-  printf("   stdout: %s\n", cmd->rstdout ? cmd->rstdout : "<none>" );
-  printf("   bg    : %s\n", cmd->bakground ? "yes" : "no");
-  PrintPgm(cmd->pgm);
+  printf("   stdin : %s\n", cmd.rstdin  ? cmd.rstdin  : "<none>" );
+  printf("   stdout: %s\n", cmd.rstdout ? cmd.rstdout : "<none>" );
+  printf("   bg    : %s\n", cmd.bakground ? "yes" : "no");
+  PrintPgm(cmd.pgm);
 }
 
 /*
@@ -121,4 +125,59 @@ stripwhite (char *string)
   while (i> 0 && whitespace (string[i]))
     i--;
   string [++i] = '\0';
+}
+
+char* GetPath() /*should be const*/
+{
+  return getenv("PATH");
+}
+
+/*int CheckCmdInPath(Command cmd)*/
+int CheckCmdInPath(Pgm *p)
+{
+  /*Pgm* p = cmd.pgm;*/
+  do
+  {
+    /*if( IsInPath(*p->pgmlist) )*/
+IsInPath(*p->pgmlist);
+      /*return 1;*/
+  }while( p = (p->next) );
+
+  /* All commands are in the path*/
+  return 0;
+}
+
+int IsInPath(char* file)
+{
+  /*A lot of refactoring needed!!!*/
+  char* path = strdup( GetPath() );
+  char * pch;
+  pch = strtok (path,":");
+
+  while (pch != NULL)
+  {
+    DIR *dir;
+    struct dirent *ent;
+    dir = opendir (pch);
+    if (dir != NULL)
+    {
+      while ((ent = readdir (dir)) != NULL) 
+      {
+        if( !strcmp(ent->d_name,file) ) 
+        {
+          printf("Found:%s/%s\n",pch,file);
+
+          free( path);
+          closedir (dir);
+          return 0;
+        }
+      }
+      closedir (dir);
+    }
+    pch = strtok (NULL, ":");
+  }
+  free( path );
+
+  printf("Not found:%s\n",file);
+  return 1;
 }
