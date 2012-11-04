@@ -1,0 +1,27 @@
+- getenv(path) and call command if they in the path
+
+- background command
+
+- pipes
+
+- stdout/in redirection
+  - stdout
+    - create file if not exist,
+    - overwrite it if exists (I guess)
+  - stdin
+    - abort if file does not exists,
+    - read it if exists
+
+- built-in functions:
+  - cd
+  - exit
+
+- Ctrl-C:
+  - terminate the running command in lsh, but does not exit.
+
+
+Optional objectives:
+  - implement setenv and unsetenv.
+  - implement wildcards
+  - job control
+  - implement basic shell language functions, such as loops for instance.
