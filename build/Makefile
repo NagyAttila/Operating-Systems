@@ -7,7 +7,9 @@ BIN=	lsh
 SRC_DIR=../src
 INC_DIR=../include
 
-SRCS=	$(SRC_DIR)/parse.c \
+SRCS= \
+			$(SRC_DIR)/exec.c \
+			$(SRC_DIR)/parse.c \
 			$(SRC_DIR)/lsh.c
 
 OBJS= ${SRCS:.c=.o}
@@ -27,6 +29,9 @@ all:	$(BIN)
 
 lsh:	$(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(LIBS) -o $(BIN)
+
+run: clean all
+	./$(BIN)
 
 clean:
 	-rm -f $(OBJS) lsh

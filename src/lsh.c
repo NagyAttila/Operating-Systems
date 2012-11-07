@@ -6,6 +6,7 @@
 #include <string.h>
 
 #include "parse.h"
+#include "exec.h"
 
 /*
  * Prototypes
@@ -53,8 +54,7 @@ int main(void)
       {
         add_history(line);
         n = parse(line, &cmd);
-        CheckCmdInPath(cmd.pgm);
-        /* execute it */
+        execute(cmd, 0, 1);
         PrintCommand(n, cmd);
       }
     }
@@ -127,57 +127,3 @@ stripwhite (char *string)
   string [++i] = '\0';
 }
 
-char* GetPath() /*should be const*/
-{
-  return getenv("PATH");
-}
-
-/*int CheckCmdInPath(Command cmd)*/
-int CheckCmdInPath(Pgm *p)
-{
-  /*Pgm* p = cmd.pgm;*/
-  do
-  {
-    /*if( IsInPath(*p->pgmlist) )*/
-IsInPath(*p->pgmlist);
-      /*return 1;*/
-  }while( p = (p->next) );
-
-  /* All commands are in the path*/
-  return 0;
-}
-
-int IsInPath(char* file)
-{
-  /*A lot of refactoring needed!!!*/
-  char* path = strdup( GetPath() );
-  char * pch;
-  pch = strtok (path,":");
-
-  while (pch != NULL)
-  {
-    DIR *dir;
-    struct dirent *ent;
-    dir = opendir (pch);
-    if (dir != NULL)
-    {
-      while ((ent = readdir (dir)) != NULL) 
-      {
-        if( !strcmp(ent->d_name,file) ) 
-        {
-          printf("Found:%s/%s\n",pch,file);
-
-          free( path);
-          closedir (dir);
-          return 0;
-        }
-      }
-      closedir (dir);
-    }
-    pch = strtok (NULL, ":");
-  }
-  free( path );
-
-  printf("Not found:%s\n",file);
-  return 1;
-}
