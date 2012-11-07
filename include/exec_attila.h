@@ -1,5 +1,5 @@
-#ifndef EXEC_H
-#define EXEC_H
+#ifndef EXEC_ATTILA_H
+#define EXEC_ATTILA_H
 
 #include <stdio.h>
 #include <stdlib.h>

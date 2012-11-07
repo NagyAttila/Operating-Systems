@@ -8,7 +8,8 @@ SRC_DIR=../src
 INC_DIR=../include
 
 SRCS= \
-			$(SRC_DIR)/exec.c \
+			$(SRC_DIR)/exec_attila.c \
+			$(SRC_DIR)/utils.c \
 			$(SRC_DIR)/parse.c \
 			$(SRC_DIR)/lsh.c
 
