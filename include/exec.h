@@ -7,6 +7,7 @@
 #include <sys/wait.h>
 
 #include "parse.h"
+#include "redirection.h"
 
 /*
  * Pipe the commands and execute them.

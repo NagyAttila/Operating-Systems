@@ -6,6 +6,8 @@ void execute(Command cmd, int in, int out)
 
   if(0 == (pid = Fork()))
   { 
+    HandelRedirection(cmd, &in, &out);
+
     CreatePipeLine(cmd.pgm, in, out);
 
     /* exec for last command in pipeline*/
@@ -14,6 +16,7 @@ void execute(Command cmd, int in, int out)
   }
   else
   {
+    
     int status;
     /* lsh waits forground cmd to terminate */
     while ( !cmd.background && (wait(&status) != pid) )
@@ -85,4 +88,5 @@ void SetStd(int put, int fd)
   dup(fd);
   close(fd);
 }
+
 

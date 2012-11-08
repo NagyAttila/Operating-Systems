@@ -11,6 +11,7 @@ SRCS= \
 			$(SRC_DIR)/exec.c \
 			$(SRC_DIR)/utils.c \
 			$(SRC_DIR)/parse.c \
+			$(SRC_DIR)/redirection.c \
 			$(SRC_DIR)/lsh.c
 
 OBJS= ${SRCS:.c=.o}
