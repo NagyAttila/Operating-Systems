@@ -9,7 +9,7 @@ void HandelRedirection(Command cmd, int* in, int* out)
 
   if( NULL != cmd.rstdout )
   {
-    *out = Open(cmd.rstdin,O_CREAT|O_WRONLY|O_TRUNC);
+    *out = Open(cmd.rstdout,O_CREAT|O_WRONLY|O_TRUNC);
   }
 }
 
@@ -17,9 +17,9 @@ int Open(const char *pathname, int flags)
 {
   int fd;
 
-  if ( (fd = open(pathname, flags)) < 0 )
+  if ( (fd = open(pathname, flags, S_IRUSR|S_IWUSR)) < 0 )
   {     
-    perror("ERROR:");
+    perror(pathname);
     exit(1);
   }
 

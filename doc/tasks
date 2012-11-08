@@ -1,8 +1,11 @@
-- getenv(path) and call command if they in the path
+- getenv(path) and call command if they in the path: 
+  DONE
 
-- background command
+- background command: 
+  DONE
 
 - pipes
+  DONE
 
 - stdout/in redirection
   - stdout
@@ -11,6 +14,7 @@
   - stdin
     - abort if file does not exists,
     - read it if exists
+  DONE
 
 - built-in functions:
   - cd
@@ -19,9 +23,14 @@
 - Ctrl-C:
   - terminate the running command in lsh, but does not exit.
 
-
 Optional objectives:
   - implement setenv and unsetenv.
   - implement wildcards
   - job control
   - implement basic shell language functions, such as loops for instance.
+
+
+
+Bugs:
+  -- At forground pipeline, lsh should wait until all the processes in the
+  pipeline terminate.

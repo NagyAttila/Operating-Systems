@@ -6,9 +6,31 @@ void execute(Command cmd, int in, int out)
 
   if(0 == (pid = Fork()))
   { 
+    /* REMARK: This function screw up 'in' and 'out' file descriptors,
+     * either we give 2 more descriptors or only unit test the 
+     * CreatePipeLine functions
+     */
     HandelRedirection(cmd, &in, &out);
 
-    CreatePipeLine(cmd.pgm, in, out);
+    /* piping needed? */
+    if ( cmd.pgm->next )
+    {
+      CreatePipeLine(cmd.pgm, in, out);
+    }
+    else
+    {
+      /* REMARK: Can be moved to HandleRedirection if 
+       * 'int in' and 'int out' are not needed
+       */
+      if( NULL != cmd.rstdin )
+      {
+        SetStd(0,in);
+      }
+      if( NULL != cmd.rstdout )
+      {
+        SetStd(1,out);
+      }
+    }
 
     /* exec for last command in pipeline*/
     Execvp( *cmd.pgm->pgmlist, 
@@ -57,17 +79,12 @@ void CreatePipeLine(Pgm *p, int in, int out)
   }
 }
 
-void Error_CmdNotFound(char* file)
-{
-  printf("lsh: %s: command not found!\n", file);
-}
-
 pid_t Fork()
 {
   pid_t  pid;
   if ((pid = fork()) < 0)   /* fork a child process */
   {     
-    printf("*** ERROR: forking child process failed\n");
+    perror(NULL);
     exit(1);
   }
   return pid;
@@ -77,7 +94,7 @@ void Execvp(const char *file, char *const argv[])
 {
   if (execvp(file, argv) < 0) 
   {
-    Error_CmdNotFound(argv[0]);
+    perror(file);
     exit(1);
   }
 }
@@ -88,5 +105,4 @@ void SetStd(int put, int fd)
   dup(fd);
   close(fd);
 }
-
 
