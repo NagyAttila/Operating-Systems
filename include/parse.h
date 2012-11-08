@@ -11,7 +11,7 @@ typedef struct node {
   char *rstdin;
   char *rstdout;
   char *rstderr;
-  int bakground;
+  int background;
 } Command;
 
 extern void init( void );

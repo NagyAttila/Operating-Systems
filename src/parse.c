@@ -35,7 +35,7 @@ parse (char *buf, Command *c)
   c->rstdin    = NULL;
   c->rstdout   = NULL;
   c->rstderr   = NULL;
-  c->bakground = 0; /* false */
+  c->background = 0; /* false */
   c->pgm       = NULL;
 
 newcmd:
@@ -62,12 +62,12 @@ newtoken:
       n = nexttoken(t, &tok);
       if (n == 0)
       {
-        c->bakground = 1;
+        c->background = 1;
         return 1;
       }
       else
       {
-        fprintf(stderr, "illegal bakgrounding\n");
+        fprintf(stderr, "illegal backgrounding\n");
         return -1;
       }
       break;

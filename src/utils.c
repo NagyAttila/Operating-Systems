@@ -6,7 +6,7 @@ PrintCommand (int n, Command cmd)
   printf("Parse returned %d:\n", n);
   printf("   stdin : %s\n", cmd.rstdin  ? cmd.rstdin  : "<none>" );
   printf("   stdout: %s\n", cmd.rstdout ? cmd.rstdout : "<none>" );
-  printf("   bg    : %s\n", cmd.bakground ? "yes" : "no");
+  printf("   bg    : %s\n", cmd.background ? "yes" : "no");
   PrintPgm(cmd.pgm);
 }
 

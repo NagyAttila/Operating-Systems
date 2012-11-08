@@ -1,14 +1,23 @@
-#include "exec_attila.h"
+#include "exec.h"
 
 void execute(Command cmd, int in, int out)
 {
-  if(0 == Fork())
+  pid_t pid;
+
+  if(0 == (pid = Fork()))
   { 
     CreatePipeLine(cmd.pgm, in, out);
 
     /* exec for last command in pipeline*/
     Execvp( *cmd.pgm->pgmlist, 
              cmd.pgm->pgmlist );
+  }
+  else
+  {
+    int status;
+    /* lsh waits forground cmd to terminate */
+    while ( !cmd.background && (wait(&status) != pid) )
+      ;
   }
 }
 

@@ -4,7 +4,7 @@
 
 #include "utils.h"
 #include "parse.h"
-#include "exec_attila.h"
+#include "exec.h"
 
 /*
  * Prototypes
@@ -53,7 +53,7 @@ int main(void)
         add_history(line);
         n = parse(line, &cmd);
         execute(cmd, 0, 1);
-        PrintCommand(n, cmd);
+        /*PrintCommand(n, cmd);*/
       }
     }
 

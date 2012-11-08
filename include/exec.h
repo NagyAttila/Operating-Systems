@@ -1,9 +1,11 @@
-#ifndef EXEC_ATTILA_H
-#define EXEC_ATTILA_H
+#ifndef EXEC_H
+#define EXEC_H
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <sys/wait.h>
+
 #include "parse.h"
 
 /*
