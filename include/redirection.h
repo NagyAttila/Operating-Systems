@@ -4,6 +4,7 @@
 #include <fcntl.h>      /* open() */
 #include <stdio.h>      /* perror() */
 #include <stdlib.h>     /* error() */
+#include <unistd.h>     /* STDIN_FILENO */
 
 #include "parse.h"
 

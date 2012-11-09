@@ -11,9 +11,8 @@
 
 /*
  * Pipe the commands and execute them.
- * 'in' and 'out' filedescriptors are necessary for unit testing.
  */
-extern void execute(Command, int, int);
+extern void execute(Command);
 
   /*
    * Pipe the commands in a reverse order, since they were 

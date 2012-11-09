@@ -1,48 +1,42 @@
 #include "exec.h"
 
-void execute(Command cmd, int in, int out)
+void execute(Command cmd)
 {
   pid_t pid;
 
-  if(0 == (pid = Fork()))
-  { 
-    /* REMARK: This function screw up 'in' and 'out' file descriptors,
-     * either we give 2 more descriptors or only unit test the 
-     * CreatePipeLine functions
-     */
-    HandelRedirection(cmd, &in, &out);
-
-    /* piping needed? */
-    if ( cmd.pgm->next )
+  char** argv = cmd.pgm->pgmlist;
+  if( isBuiltin(*argv) )
+  {
+    if ( NULL == cmd.pgm->next)
     {
-      CreatePipeLine(cmd.pgm, in, out);
+      ExecBuiltin(*argv, argv);
     }
-    else
-    {
-      /* REMARK: Can be moved to HandleRedirection if 
-       * 'int in' and 'int out' are not needed
-       */
-      if( NULL != cmd.rstdin )
-      {
-        SetStd(0,in);
-      }
-      if( NULL != cmd.rstdout )
-      {
-        SetStd(1,out);
-      }
-    }
-
-    /* exec for last command in pipeline*/
-    Execvp( *cmd.pgm->pgmlist, 
-             cmd.pgm->pgmlist );
   }
   else
   {
-    
-    int status;
-    /* lsh waits forground cmd to terminate */
-    while ( !cmd.background && (wait(&status) != pid) )
-      ;
+    if(0 == (pid = Fork()))
+    { 
+      int in, out;
+      HandelRedirection(cmd, &in, &out);
+
+      /* piping needed? */
+      if ( cmd.pgm->next )
+      {
+        CreatePipeLine(cmd.pgm, in, out);
+      }
+
+      /* exec for last command in pipeline*/
+      Execvp( *cmd.pgm->pgmlist, 
+              cmd.pgm->pgmlist );
+    }
+    else
+    {
+      int status;
+
+      /* lsh waits forground cmd to terminate */
+      while ( !cmd.background && (wait(&status) != pid) )
+        ;
+    }
   }
 }
 
