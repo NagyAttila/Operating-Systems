@@ -17,6 +17,9 @@ void execute(Command cmd)
     if(0 == (pid = Fork()))
     { 
       int in, out;
+      in = STDIN_FILENO;
+      out = STDOUT_FILENO;
+
       HandelRedirection(cmd, &in, &out);
 
       /* piping needed? */
