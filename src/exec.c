@@ -3,7 +3,6 @@
 void execute(Command cmd)
 {
   pid_t pid;
-
   char** argv = cmd.pgm->pgmlist;
   if( isBuiltin(*argv) )
   {
@@ -34,11 +33,11 @@ void execute(Command cmd)
     }
     else
     {
-      int status;
-
       /* lsh waits forground cmd to terminate */
-      while ( !cmd.background && (wait(&status) != pid) )
-        ;
+      if(!cmd.background)
+      {
+        Wait(pid);
+      }
     }
   }
 }
@@ -103,3 +102,10 @@ void SetStd(int put, int fd)
   close(fd);
 }
 
+int Wait(pid_t pid)
+{
+  int status;
+  while ( (wait(&status) != pid) )
+    ;
+  return status;
+}
