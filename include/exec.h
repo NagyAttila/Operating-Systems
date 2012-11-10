@@ -6,8 +6,9 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
-#include "parse.h"
-#include "redirection.h"
+#include "parse.h"       /* Command */
+#include "redirection.h" /* HandleRedirection() */
+#include "builtin.h"     /* SetStd() */
 
 /*
  * Pipe the commands and execute them.
@@ -37,8 +38,8 @@ extern pid_t Fork();
 extern void Execvp(const char *file, char *const argv[]);
 
 /*
- * Sets the given filedescriptor to standard in or out.
+ * Wrapper for wait system call.
  */
-extern void SetStd(int put, int fd);
+extern int Wait(pid_t pid);
 
 #endif

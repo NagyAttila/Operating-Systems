@@ -8,8 +8,13 @@
 
 #include "parse.h"
 
-void HandelRedirection(Command, int*, int*);
+extern void HandelRedirection(Command, int*, int*);
 
-int Open(const char*, int);
+extern int Open(const char*, int);
+
+/*
+ * Sets the given filedescriptor to standard in or out.
+ */
+extern void SetStd(int put, int fd);
 
 #endif

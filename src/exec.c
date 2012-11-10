@@ -95,13 +95,6 @@ void Execvp(const char *file, char *const argv[])
   }
 }
 
-void SetStd(int put, int fd)
-{
-  close(put);
-  dup(fd);
-  close(fd);
-}
-
 int Wait(pid_t pid)
 {
   int status;

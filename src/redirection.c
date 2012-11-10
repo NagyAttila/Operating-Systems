@@ -27,3 +27,11 @@ int Open(const char *pathname, int flags)
 
   return fd;
 }
+
+void SetStd(int put, int fd)
+{
+  close(put);
+  dup(fd);
+  close(fd);
+}
+

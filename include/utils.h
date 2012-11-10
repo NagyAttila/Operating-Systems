@@ -13,8 +13,7 @@
  * Desc: Prints a Command structure as returned by parse on stdout.
  *
  */
-void
-PrintCommand (int, Command);
+extern void PrintCommand (int, Command);
 
 /*
  * Name: PrintPgm
@@ -22,15 +21,13 @@ PrintCommand (int, Command);
  * Desc: Prints a list of Pgm:s
  *
  */
-void
-PrintPgm (Pgm*);
+extern void PrintPgm (Pgm*);
 
 /*
  * Name: stripwhite
  *
  * Desc: Strip whitespace from the start and end of STRING.
  */
-void
-stripwhite (char*);
+extern void stripwhite (char*);
 
 #endif

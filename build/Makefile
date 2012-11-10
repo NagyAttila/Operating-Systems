@@ -2,18 +2,18 @@
 # Sample Makefile for lsh
 # lab1 in Operating System course
 #
-BIN=	lsh
+BIN=lsh
 
 SRC_DIR=../src
 INC_DIR=../include
 TST_DIR=../tst
 
 SRCS= \
-			$(SRC_DIR)/exec.c \
 			$(SRC_DIR)/utils.c \
 			$(SRC_DIR)/parse.c \
 			$(SRC_DIR)/builtin.c \
 			$(SRC_DIR)/redirection.c \
+			$(SRC_DIR)/exec.c \
 			$(SRC_DIR)/lsh.c
 
 OBJS= ${SRCS:.c=.o}
@@ -40,5 +40,6 @@ run: clean all
 clean:
 	-rm -f $(OBJS) lsh
 
+.PHONY: test
 test:
-	-exec $(TST_DIR)/test.sh
+	-$(TST_DIR)/runner.sh ../build/$(BIN)
