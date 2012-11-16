@@ -20,7 +20,7 @@ extern void execute(Command);
    * saved reversed during command line parsing.
    * (The lion share of the work resides here.)
    */
-extern void InterceptWith(Pgm*);
+extern void CreatePipeLine(Pgm*, int, int);
 
 /*
  * Printing 'command not found' error to stdout.
