@@ -90,8 +90,13 @@ void OnInterrupt(int signal) {
   }
 }
 
-// When we get the SIGCHLD signal, a background process has exited, so simply 
-// wait() for it so it does not become a zombie.
 void OnChildExit(int signal) {
-  wait(NULL);
+  // If the process that exited is a background process, we wait for it here.
+  // If the process was a foreground process, we already waited for it above, 
+  // so make the call non-blocking.
+  // Zero is returned when no process has exited. We need this or the loop
+  // becomes infinite.
+  while (waitpid(-1, NULL, WNOHANG) > 0) {
+    // Do nothing
+  }
 }
