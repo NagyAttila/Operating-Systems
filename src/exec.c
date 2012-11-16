@@ -96,7 +96,7 @@ void Execvp(const char *file, char *const argv[])
 {
   if (execvp(file, argv) < 0) 
   {
-    perror(file);
+    fprintf(stderr, "Command not found.\n");
     exit(1);
   }
 }
