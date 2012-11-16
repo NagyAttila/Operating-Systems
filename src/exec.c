@@ -2,7 +2,6 @@
 
 void execute(Command cmd)
 {
-  pid_t pid;
   char** argv = cmd.pgm->pgmlist;
   if( isBuiltin(*argv) )
   {
@@ -13,65 +12,60 @@ void execute(Command cmd)
   }
   else
   {
-    if(0 == (pid = Fork()))
-    { 
-      int in, out;
-      in = STDIN_FILENO;
-      out = STDOUT_FILENO;
-
-      HandelRedirection(cmd, &in, &out);
-
-      /* piping needed? */
-      if ( cmd.pgm->next )
-      {
-        CreatePipeLine(cmd.pgm, in, out);
+    pid_t pid = Fork();
+    if (pid == 0) {
+      if (cmd.rstdin != NULL) {
+        int in_file = Open(cmd.rstdin, O_RDONLY);
+        close(STDIN_FILENO);
+        dup(in_file);
       }
-
-      /* exec for last command in pipeline*/
-      Execvp( *cmd.pgm->pgmlist, 
-              cmd.pgm->pgmlist );
-    }
-    else
-    {
-      /* lsh waits forground cmd to terminate */
-      if(!cmd.background)
-      {
-        Wait(pid);
+      
+      if (cmd.rstdout != NULL) {
+        int out_file = Open(cmd.rstdout, O_CREAT|O_WRONLY|O_TRUNC);
+        close(STDOUT_FILENO);
+        dup(out_file);
       }
+      
+      InterceptWith(cmd.pgm);
+      execvp(*(cmd.pgm->pgmlist), cmd.pgm->pgmlist);
+    } else {
+      wait(NULL);
     }
   }
 }
 
-void CreatePipeLine(Pgm *p, int in, int out)
+void InterceptWith(Pgm *p)
 {
-  char **argv;
-  int pipe_fd[2];
-
-  /* Reverse iteration */
-  if (p == NULL)
+  if (p == NULL) {
     return;
-  else
-  {
-    CreatePipeLine(p->next, in, out);
-
-    argv = p->pgmlist;
-
-    pipe(pipe_fd);
-
-    if(0 == Fork())
-    { 
-      /* Child */
-      SetStd(in,pipe_fd[0]);
-      close(pipe_fd[1]);
-    }
-    else 
-    { 
-      /* Parent*/
-      SetStd(out,pipe_fd[1]);
-      close(pipe_fd[0]);
-
-      Execvp(*argv, argv);
-    }
+  }
+  
+  int ends[2];
+  pipe(ends);
+  int read_end = ends[0];
+  int write_end = ends[1];
+  
+  pid_t pid = Fork();
+  if (pid == 0) {
+    // Child
+    
+    InterceptWith(p->next);
+    
+    // Write to parent
+    close(read_end);
+    close(STDOUT_FILENO);
+    dup(write_end);
+    
+    execvp(*(p->pgmlist), p->pgmlist);
+  } else {
+    // Parent
+    
+    // Read from child
+    close(write_end);
+    close(STDIN_FILENO);
+    dup(read_end);
+    
+    wait(NULL);
   }
 }
 
