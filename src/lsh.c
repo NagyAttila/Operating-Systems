@@ -18,6 +18,7 @@ void stripwhite(char *);
 void OnInterrupt(int);
 void OnChildExit(int);
 
+// The pid of the currently running process.
 pid_t running_pid = 0;
 
 /* When non-zero, this global means the user is done using this program. */
@@ -64,7 +65,10 @@ int main(void)
         pid_t new_pid = execute(cmd);
         
         if (!cmd.background) {
-          running_pid = new_pid; // We only save if foreground, because we never want to interrupt background.
+          // We only save the pid if it's a foreground process, because we 
+          // never want to interrupt a background process.
+          // Background processes are taken care of with the SIGCHLD signal.
+          running_pid = new_pid;
           waitpid(running_pid, NULL, NULL);
           // When we get here, the process with running_pid has exited
         }
@@ -78,12 +82,16 @@ int main(void)
 }
 
 void OnInterrupt(int signal) {
+  // running_pid is zero if we are just typing in the shell. In that case,
+  // do nothing.
   if (running_pid != 0) {
     kill(running_pid, SIGTERM);
     running_pid = 0;
   }
 }
 
+// When we get the SIGCHLD signal, a background process has exited, so simply 
+// wait() for it so it does not become a zombie.
 void OnChildExit(int signal) {
   wait(NULL);
 }

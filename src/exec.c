@@ -14,12 +14,14 @@ pid_t execute(Command cmd)
   {
     pid_t pid = Fork();
     if (pid == 0) {
+      // Redirect input from file if applicable.
       if (cmd.rstdin != NULL) {
         int in_file = Open(cmd.rstdin, O_RDONLY);
         close(STDIN_FILENO);
         dup(in_file);
       }
       
+      // Redirect output to file if applicable.
       if (cmd.rstdout != NULL) {
         int out_file = Open(cmd.rstdout, O_CREAT|O_WRONLY|O_TRUNC);
         close(STDOUT_FILENO);
@@ -36,7 +38,14 @@ pid_t execute(Command cmd)
   return 0;
 }
 
+// Holds the pid of the child process if there is one, allowing us to terminate
+// it later on if Ctrl-C is pressed.
 pid_t pid = 0;
+
+// Execute the given command, "stealing" the input used by the current process 
+// and sending the output to the current process's input instead.
+// Recursive method of implementing pipes. Note that it does nothing if called 
+// with NULL.
 void InterceptWith(Pgm *p)
 {
   if (p == NULL) {
@@ -74,6 +83,8 @@ void InterceptWith(Pgm *p)
   }
 }
 
+// When the user presses Ctrl-C, we get this signal from the parent.
+// Terminate a child process if there is one, then terminate this process.
 void OnTerminate(int signal) {
   if (pid != 0) {
     kill(pid, SIGTERM);
@@ -101,6 +112,7 @@ void Execvp(const char *file, char *const argv[])
   }
 }
 
+// Run either a built-in command or a file.
 void RunCommand(const char *name, char *const argv[]) {
   if (isBuiltin(name)) {
     ExecBuiltin(name, argv);
