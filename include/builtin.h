@@ -5,7 +5,6 @@
 #include <stdlib.h>     /* exit() */
 #include <string.h>
 #include <errno.h>
-#include <unistd.h>     /* STDIN_FILENO */
 
 extern int isBuiltin(char*);
 
