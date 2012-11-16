@@ -37,11 +37,8 @@ extern pid_t Fork();
  */
 extern void Execvp(const char *file, char *const argv[]);
 
-/*
- * Wrapper for wait system call.
- */
-extern int Wait(pid_t pid);
-
 extern void OnTerminate(int);
+
+extern void RunCommand(const char *name, char *const argv[]);
 
 #endif
