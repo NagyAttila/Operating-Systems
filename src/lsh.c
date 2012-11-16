@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <signal.h>
+#include <unistd.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 
@@ -13,6 +15,9 @@
 void PrintCommand(int, Command);
 void PrintPgm(Pgm *);
 void stripwhite(char *);
+void OnInterrupt(int);
+
+pid_t running_pid = 0;
 
 /* When non-zero, this global means the user is done using this program. */
 int done = 0;
@@ -28,6 +33,8 @@ int main(void)
   Command cmd;
   int n;
 
+  signal(SIGINT, OnInterrupt);
+  
   while (! done) {
 
     char *line;
@@ -52,7 +59,8 @@ int main(void)
       {
         add_history(line);
         n = parse(line, &cmd);
-        execute(cmd);
+        running_pid = execute(cmd);
+        wait(NULL);
         /*PrintCommand(n, cmd);*/
       }
     }
@@ -63,3 +71,8 @@ int main(void)
   return 0;
 }
 
+void OnInterrupt(int signal) {
+  if (running_pid != 0) {
+    kill(running_pid, SIGTERM);
+  }
+}

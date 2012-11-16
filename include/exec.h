@@ -13,14 +13,14 @@
 /*
  * Pipe the commands and execute them.
  */
-extern void execute(Command);
+extern pid_t execute(Command);
 
   /*
    * Pipe the commands in a reverse order, since they were 
    * saved reversed during command line parsing.
    * (The lion share of the work resides here.)
    */
-extern void CreatePipeLine(Pgm*, int, int);
+extern void InterceptWith(Pgm*);
 
 /*
  * Printing 'command not found' error to stdout.
@@ -41,5 +41,7 @@ extern void Execvp(const char *file, char *const argv[]);
  * Wrapper for wait system call.
  */
 extern int Wait(pid_t pid);
+
+extern void OnTerminate(int);
 
 #endif
