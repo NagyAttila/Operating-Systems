@@ -27,7 +27,7 @@ pid_t execute(Command cmd)
       }
       
       InterceptWith(cmd.pgm->next);
-      Execvp(*(cmd.pgm->pgmlist), cmd.pgm->pgmlist);
+      RunCommand(*cmd.pgm->pgmlist, cmd.pgm->pgmlist);
     } else {
       return pid;
     }
@@ -61,7 +61,7 @@ void InterceptWith(Pgm *p)
     
     signal(SIGTERM, OnTerminate);
     signal(SIGINT, SIG_IGN);
-    Execvp(*(p->pgmlist), p->pgmlist);
+    RunCommand(*p->pgmlist, p->pgmlist);
   } else {
     // Parent
     
@@ -101,10 +101,10 @@ void Execvp(const char *file, char *const argv[])
   }
 }
 
-int Wait(pid_t pid)
-{
-  int status;
-  while ( (wait(&status) != pid) )
-    ;
-  return status;
+void RunCommand(const char *name, char *const argv[]) {
+  if (isBuiltin(name)) {
+    ExecBuiltin(name, argv);
+  } else {
+    Execvp(name, argv);
+  }
 }
