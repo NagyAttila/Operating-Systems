@@ -1,2 +1,22 @@
-ls -l | grep s
-pwd
+ls -l | grep s | sort | wc | cat
+ls -l | grep s | sort | wc | cat > temp
+cat < temp
+rm temp
+echo bla > temp
+cat < temp
+rm temp
+date
+sleep 3&
+date
+sleep 3
+date
+date
+sleep 3 | echo bla
+date
+sleep 3 | echo bla &
+date
+echo bla | sleep 3 
+date
+echo bla | sleep 3 &
+date
+cd ..
