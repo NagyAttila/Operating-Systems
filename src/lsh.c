@@ -16,6 +16,7 @@ void PrintCommand(int, Command);
 void PrintPgm(Pgm *);
 void stripwhite(char *);
 void OnInterrupt(int);
+void OnChildExit(int);
 
 pid_t running_pid = 0;
 
@@ -34,6 +35,7 @@ int main(void)
   int n;
 
   signal(SIGINT, OnInterrupt);
+  signal(SIGCHLD, OnChildExit);
   
   while (! done) {
 
@@ -66,7 +68,6 @@ int main(void)
           waitpid(running_pid, NULL, NULL);
           // When we get here, the process with running_pid has exited
         }
-        /*PrintCommand(n, cmd);*/
       }
     }
 
@@ -81,4 +82,8 @@ void OnInterrupt(int signal) {
     kill(running_pid, SIGTERM);
     running_pid = 0;
   }
+}
+
+void OnChildExit(int signal) {
+  wait(NULL);
 }
