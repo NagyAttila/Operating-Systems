@@ -59,8 +59,13 @@ int main(void)
       {
         add_history(line);
         n = parse(line, &cmd);
-        running_pid = execute(cmd);
-        wait(NULL);
+        pid_t new_pid = execute(cmd);
+        
+        if (!cmd.background) {
+          running_pid = new_pid; // We only save if foreground, because we never want to interrupt background.
+          waitpid(running_pid, NULL, NULL);
+          // When we get here, the process with running_pid has exited
+        }
         /*PrintCommand(n, cmd);*/
       }
     }
@@ -74,5 +79,6 @@ int main(void)
 void OnInterrupt(int signal) {
   if (running_pid != 0) {
     kill(running_pid, SIGTERM);
+    running_pid = 0;
   }
 }

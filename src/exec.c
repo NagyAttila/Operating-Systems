@@ -60,6 +60,7 @@ void InterceptWith(Pgm *p)
     dup(write_end);
     
     signal(SIGTERM, OnTerminate);
+    signal(SIGINT, SIG_IGN);
     Execvp(*(p->pgmlist), p->pgmlist);
   } else {
     // Parent
