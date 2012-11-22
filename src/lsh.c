@@ -71,6 +71,7 @@ int main(void)
           running_pid = new_pid;
           waitpid(running_pid, NULL, NULL);
           // When we get here, the process with running_pid has exited
+          running_pid = 0;
         }
       }
     }

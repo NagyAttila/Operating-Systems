@@ -28,6 +28,12 @@ pid_t execute(Command cmd)
         dup(out_file);
       }
       
+      // Ignore Ctrl-C but terminate children when asked to.
+      // This is done inside InterceptWith but not for the first process in
+      // the pipeline, so we do it here as well.
+      signal(SIGINT, SIG_IGN);
+      signal(SIGTERM, OnTerminate);
+      
       InterceptWith(cmd.pgm->next);
       RunCommand(*cmd.pgm->pgmlist, cmd.pgm->pgmlist);
     } else {
@@ -68,8 +74,10 @@ void InterceptWith(Pgm *p)
     close(STDOUT_FILENO);
     dup(write_end);
     
-    signal(SIGTERM, OnTerminate);
+    // Ignore Ctrl-C but terminate children when asked to.
     signal(SIGINT, SIG_IGN);
+    signal(SIGTERM, OnTerminate);
+    
     RunCommand(*p->pgmlist, p->pgmlist);
   } else {
     // Parent
@@ -87,6 +95,7 @@ void InterceptWith(Pgm *p)
 // Terminate a child process if there is one, then terminate this process.
 void OnTerminate(int signal) {
   if (pid != 0) {
+    // The child should in turn kill its own child if there is one.
     kill(pid, SIGTERM);
     exit(1);
   }
